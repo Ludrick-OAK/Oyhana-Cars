@@ -2,8 +2,15 @@ import type { MaintenanceEntry, MaintenanceRule } from "@/lib/appwrite/types";
 
 export type DueStatus = "ok" | "soon" | "overdue" | "unknown";
 
+// Tout relevé kilométrique daté — une intervention d'entretien ou un plein
+// de carburant sont tous deux des sources valables de kilométrage réel.
+export interface KmPoint {
+  date: string;
+  km: number;
+}
+
 export interface Stats {
-  last: MaintenanceEntry;
+  last: KmPoint;
   kmPerMonth: number;
   kmPerYear: number;
 }
@@ -24,6 +31,10 @@ export function sortedEntries(entries: MaintenanceEntry[]) {
   return [...entries].sort((a, b) => +new Date(a.date) - +new Date(b.date));
 }
 
+function sortedPoints(points: KmPoint[]) {
+  return [...points].sort((a, b) => +new Date(a.date) - +new Date(b.date));
+}
+
 function addMonths(date: Date, months: number) {
   const d = new Date(date);
   d.setMonth(d.getMonth() + months);
@@ -34,8 +45,11 @@ function daysBetween(a: Date, b: Date) {
   return Math.round((+b - +a) / 86400000);
 }
 
-export function computeStats(entries: MaintenanceEntry[]): Stats | null {
-  const se = sortedEntries(entries);
+// Accepte n'importe quelle combinaison de relevés kilométriques (interventions
+// d'entretien + pleins de carburant) pour déterminer le kilométrage le plus
+// récent connu et la moyenne annuelle — plus la source est riche, plus c'est précis.
+export function computeStats(points: KmPoint[]): Stats | null {
+  const se = sortedPoints(points);
   if (se.length === 0) return null;
   const first = se[0];
   const last = se[se.length - 1];
@@ -134,9 +148,11 @@ export function computeDue(
 export function computeAllDues(
   rules: MaintenanceRule[],
   entries: MaintenanceEntry[],
-  today: Date = new Date()
+  today: Date = new Date(),
+  extraKmPoints: KmPoint[] = []
 ): DueResult[] {
-  const stats = computeStats(entries);
+  const points: KmPoint[] = [...entries.map((e) => ({ date: e.date, km: e.km })), ...extraKmPoints];
+  const stats = computeStats(points);
   if (!stats) return rules.map((rule) => ({ rule, unknown: true, status: "unknown" as const }));
 
   return rules

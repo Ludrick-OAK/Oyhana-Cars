@@ -1,10 +1,16 @@
 import { computeStats } from "@/lib/maintenance/compute";
 import { fmtDate, fmtKm } from "@/lib/utils";
 import { Download } from "lucide-react";
-import type { MaintenanceEntry, Vehicle } from "@/lib/appwrite/types";
+import type { MaintenanceEntry, Vehicle, FuelLog } from "@/lib/appwrite/types";
 
-export function OdometerHero({ vehicle, entries }: { vehicle: Vehicle; entries: MaintenanceEntry[] }) {
-  const stats = computeStats(entries);
+export function OdometerHero({
+  vehicle, entries, fuelLogs = [],
+}: { vehicle: Vehicle; entries: MaintenanceEntry[]; fuelLogs?: FuelLog[] }) {
+  const points = [
+    ...entries.map((e) => ({ date: e.date, km: e.km })),
+    ...fuelLogs.map((f) => ({ date: f.date, km: f.km })),
+  ];
+  const stats = computeStats(points);
 
   return (
     <div className="rounded-xl2 border border-border bg-panel p-7 mb-8 relative overflow-hidden">

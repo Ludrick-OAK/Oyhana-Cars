@@ -50,7 +50,7 @@ export default async function VehiclePage({ params }: { params: { vehicleId: str
   return (
     <div>
       <RealtimeRefresher vehicleId={vehicle.id} />
-      <OdometerHero vehicle={vehicle} entries={entries} />
+      <OdometerHero vehicle={vehicle} entries={entries} fuelLogs={fuelLogs} />
 
       <Tabs defaultValue="overview">
         <TabsList>
@@ -64,7 +64,7 @@ export default async function VehiclePage({ params }: { params: { vehicleId: str
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
-          <MaintenanceGaugeGrid rules={rules} entries={entries} />
+          <MaintenanceGaugeGrid rules={rules} entries={entries} fuelLogs={fuelLogs} />
           <KmEvolutionChart entries={entries} />
         </TabsContent>
 

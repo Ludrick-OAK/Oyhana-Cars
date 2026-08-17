@@ -5,7 +5,7 @@ import { computeAllDues, findAllMatches, type DueResult } from "@/lib/maintenanc
 import { fmtDate, fmtKm } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import type { MaintenanceEntry, MaintenanceRule } from "@/lib/appwrite/types";
+import type { MaintenanceEntry, MaintenanceRule, FuelLog } from "@/lib/appwrite/types";
 
 const STATUS_LABEL: Record<string, string> = {
   ok: "OK",
@@ -50,9 +50,11 @@ function Dial({ progress, status }: { progress: number; status: string }) {
   );
 }
 
-export function MaintenanceGaugeGrid({ rules, entries }: { rules: MaintenanceRule[]; entries: MaintenanceEntry[] }) {
+export function MaintenanceGaugeGrid({
+  rules, entries, fuelLogs = [],
+}: { rules: MaintenanceRule[]; entries: MaintenanceEntry[]; fuelLogs?: FuelLog[] }) {
   const [openRule, setOpenRule] = useState<MaintenanceRule | null>(null);
-  const dues = computeAllDues(rules, entries);
+  const dues = computeAllDues(rules, entries, new Date(), fuelLogs.map((f) => ({ date: f.date, km: f.km })));
   const matches = openRule ? findAllMatches(openRule, entries) : [];
   const openDue = dues.find((d) => d.rule.id === openRule?.id);
 
