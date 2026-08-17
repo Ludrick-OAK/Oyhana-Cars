@@ -11,6 +11,18 @@ const PAGE_W = 595.28; // A4
 const PAGE_H = 841.89;
 const MARGIN = 50;
 
+// La police standard du PDF (WinAnsi) ne sait pas encoder certains caractères
+// Unicode que produisent toLocaleString/toLocaleDateString en français
+// (espace fine insécable entre les milliers, apostrophes/tirets typographiques...).
+// On les ramène à leurs équivalents ASCII avant d'écrire quoi que ce soit dans le PDF.
+function pdfSafe(text: string): string {
+  return text
+    .replace(/[\u202F\u00A0\u2009\u2007]/g, " ")   // espaces insécables/fines -> espace normale
+    .replace(/[\u2018\u2019\u02BC]/g, "'")           // apostrophes typographiques -> '
+    .replace(/[\u201C\u201D]/g, '"')                 // guillemets typographiques -> "
+    .replace(/[\u2013\u2014]/g, "-");                // tirets typographiques -> -
+}
+
 export async function GET(_req: Request, { params }: { params: { vehicleId: string } }) {
   const { databases } = createSessionClient();
 
@@ -46,11 +58,11 @@ export async function GET(_req: Request, { params }: { params: { vehicleId: stri
 
   page.drawText("CARNET D'ENTRETIEN", { x: MARGIN, y, size: 11, font: bold, color: copper });
   y -= 22;
-  page.drawText(vehicle.name, { x: MARGIN, y, size: 22, font: bold, color: dark });
+  page.drawText(pdfSafe(vehicle.name), { x: MARGIN, y, size: 22, font: bold, color: dark });
   y -= 20;
   const specs = [vehicle.engine, vehicle.fuelType, vehicle.transmission && `Boîte ${vehicle.transmission}`]
     .filter(Boolean).join("  ·  ");
-  page.drawText(specs, { x: MARGIN, y, size: 10, font, color: gray });
+  page.drawText(pdfSafe(specs), { x: MARGIN, y, size: 10, font, color: gray });
   y -= 30;
 
   page.drawLine({ start: { x: MARGIN, y }, end: { x: PAGE_W - MARGIN, y }, thickness: 1, color: rgb(0.85, 0.85, 0.85) });
@@ -66,19 +78,19 @@ export async function GET(_req: Request, { params }: { params: { vehicleId: stri
 
   for (const e of entries) {
     newPageIfNeeded(60);
-    page.drawText(fmtDate(e.date), { x: colDate, y, size: 9.5, font: bold, color: dark });
-    page.drawText(fmtKm(e.km), { x: colKm, y, size: 9.5, font, color: gray });
-    page.drawText(e.title, { x: colTitle, y, size: 9.5, font: bold, color: dark });
+    page.drawText(pdfSafe(fmtDate(e.date)), { x: colDate, y, size: 9.5, font: bold, color: dark });
+    page.drawText(pdfSafe(fmtKm(e.km)), { x: colKm, y, size: 9.5, font, color: gray });
+    page.drawText(pdfSafe(e.title), { x: colTitle, y, size: 9.5, font: bold, color: dark });
     y -= rowGap;
 
     for (const item of e.items) {
       newPageIfNeeded(20);
-      page.drawText(`•  ${item}`, { x: colTitle, y, size: 9, font, color: gray });
+      page.drawText(pdfSafe(`•  ${item}`), { x: colTitle, y, size: 9, font, color: gray });
       y -= 12.5;
     }
     if (e.note) {
       newPageIfNeeded(20);
-      page.drawText(e.note, { x: colTitle, y, size: 8.5, font, color: gray });
+      page.drawText(pdfSafe(e.note), { x: colTitle, y, size: 8.5, font, color: gray });
       y -= 12.5;
     }
     y -= 8;
