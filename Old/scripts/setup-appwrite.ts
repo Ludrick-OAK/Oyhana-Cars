@@ -72,13 +72,7 @@ async function waitForAttributesAvailable(collectionId: string, keys: string[], 
 
 async function main() {
   console.log("→ Base de données");
-  try {
-    await databases.get(DATABASE_ID);
-    console.log("  déjà existante, on continue.");
-  } catch (e: any) {
-    if (e.code !== 404) throw e;
-    await databases.create(DATABASE_ID, "Oyhana Cars");
-  }
+  await ignoreIfExists(databases.create(DATABASE_ID, "Oyhana Cars"));
 
   console.log("→ Collection: households");
   await ensureCollection("households", "Households");
