@@ -2,15 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Thème clair (valeurs par défaut) */
+:root {
+  --color-bg: 245 242 236;
+  --color-panel: 255 255 255;
+  --color-panel2: 240 236 228;
+  --color-border: 221 214 202;
+  --color-ink: 33 29 24;
+  --color-muted: 107 101 88;
+  --color-copper: 168 101 58;
+  --color-copper-dim: 201 144 106;
+  --color-ok: 63 122 77;
+  --color-soon: 166 117 24;
+  --color-overdue: 163 55 47;
+  --color-input: 250 248 243;
+}
+
+/* Thème sombre */
+.dark {
+  --color-bg: 20 22 26;
+  --color-panel: 28 31 36;
+  --color-panel2: 34 38 44;
+  --color-border: 43 47 54;
+  --color-ink: 236 233 226;
+  --color-muted: 139 143 152;
+  --color-copper: 192 133 82;
+  --color-copper-dim: 138 95 59;
+  --color-ok: 111 169 122;
+  --color-soon: 217 164 65;
+  --color-overdue: 193 85 79;
+  --color-input: 15 17 20;
+}
+
 body {
+  background:
+    radial-gradient(1200px 600px at 20% -10%, rgb(var(--color-panel2)) 0%, transparent 60%),
+    rgb(var(--color-bg));
+  color: rgb(var(--color-ink));
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.dark body {
   background:
     radial-gradient(1200px 600px at 20% -10%, #1c2530 0%, transparent 60%),
     radial-gradient(900px 500px at 100% 0%, #241c17 0%, transparent 55%),
-    #14161a;
-  color: #ece9e2;
+    rgb(var(--color-bg));
 }
 
 ::selection {
-  background: #c08552;
-  color: #171310;
+  background: rgb(var(--color-copper));
+  color: rgb(var(--color-panel));
 }

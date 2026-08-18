@@ -104,6 +104,11 @@ async function main() {
     { kind: "string", key: "purchaseDate", size: 16, required: false },
     { kind: "string", key: "photoFileIds", size: 64, required: false, array: true },
     { kind: "boolean", key: "manufacturerEnabled", required: false, default: true },
+    { kind: "string", key: "registrationPlate", size: 16, required: false },
+    { kind: "string", key: "vin", size: 17, required: false },
+    { kind: "integer", key: "fiscalPowerCv", required: false },
+    { kind: "string", key: "vehicleCategory", size: 8, required: false },
+    { kind: "integer", key: "co2ClassGkm", required: false },
   ]);
   await ignoreIfExists(databases.createIndex(DATABASE_ID, "vehicles", "by_household", IndexType.Key, ["householdId"]));
 

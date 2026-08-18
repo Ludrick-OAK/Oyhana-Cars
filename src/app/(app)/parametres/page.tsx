@@ -23,7 +23,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: { e
           <p className="text-sm text-muted mb-2">Code d'invitation</p>
           <p className="font-mono text-2xl text-copper tracking-widest mb-2">{household.inviteCode}</p>
           <p className="text-xs text-muted">
-            Partage ce code avec ta femme : depuis son propre compte, elle pourra l'utiliser ci-dessous pour rejoindre ce foyer et voir les mêmes véhicules que toi.
+            Partage ce code avec un autre utilisateur : depuis son propre compte, il pourra l'utiliser ci-dessous pour rejoindre ce foyer et voir les mêmes véhicules que toi.
           </p>
         </CardContent>
       </Card>

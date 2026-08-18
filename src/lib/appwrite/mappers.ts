@@ -17,6 +17,11 @@ export const mapVehicle = (d: Doc): Vehicle => ({
   firstRegistration: d.firstRegistration ?? null, purchaseDate: d.purchaseDate ?? null,
   photoFileIds: d.photoFileIds || [],
   manufacturerEnabled: d.manufacturerEnabled ?? true,
+  registrationPlate: d.registrationPlate ?? null,
+  vin: d.vin ?? null,
+  fiscalPowerCv: d.fiscalPowerCv ?? null,
+  vehicleCategory: d.vehicleCategory ?? null,
+  co2ClassGkm: d.co2ClassGkm ?? null,
 });
 
 export const mapEntry = (d: Doc): MaintenanceEntry => ({

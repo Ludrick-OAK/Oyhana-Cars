@@ -83,3 +83,30 @@ export async function toggleManufacturerTab(vehicleId: string, enabled: boolean)
   await databases.updateDocument(DATABASE_ID, COLLECTIONS.vehicles, vehicleId, { manufacturerEnabled: enabled });
   revalidatePath(`/vehicules/${vehicleId}`);
 }
+
+export async function updateVehicle(vehicleId: string, formData: FormData) {
+  const { databases } = createSessionClient();
+
+  const str = (key: string) => (String(formData.get(key) || "").trim() || null);
+  const num = (key: string) => (formData.get(key) ? Number(formData.get(key)) : null);
+
+  await databases.updateDocument(DATABASE_ID, COLLECTIONS.vehicles, vehicleId, {
+    name: String(formData.get("name") || "").trim(),
+    brand: str("brand"),
+    model: str("model"),
+    engine: str("engine"),
+    powerHp: num("power_hp"),
+    fuelType: str("fuel_type"),
+    transmission: str("transmission"),
+    gears: num("gears"),
+    firstRegistration: str("first_registration"),
+    purchaseDate: str("purchase_date"),
+    registrationPlate: str("registration_plate"),
+    vin: str("vin"),
+    fiscalPowerCv: num("fiscal_power_cv"),
+    vehicleCategory: str("vehicle_category"),
+    co2ClassGkm: num("co2_class"),
+  });
+
+  revalidatePath(`/vehicules/${vehicleId}`);
+}

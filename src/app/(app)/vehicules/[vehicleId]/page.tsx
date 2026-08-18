@@ -18,6 +18,7 @@ import { PhotoGallery } from "@/components/photo-gallery";
 import { KmEvolutionChart } from "@/components/km-evolution-chart";
 import { FuelTab } from "@/components/fuel-tab";
 import { VehicleSettingsCard } from "@/components/vehicle-settings-card";
+import { VehicleInfoForm } from "@/components/vehicle-info-form";
 
 export default async function VehiclePage({ params }: { params: { vehicleId: string } }) {
   const { databases } = createSessionClient();
@@ -92,6 +93,7 @@ export default async function VehiclePage({ params }: { params: { vehicleId: str
         )}
 
         <TabsContent value="settings" className="space-y-6">
+          <VehicleInfoForm vehicle={vehicle} />
           <div>
             <p className="text-[11px] uppercase tracking-wide text-muted font-mono mb-3">Photos</p>
             <PhotoGallery vehicleId={vehicle.id} photoFileIds={vehicle.photoFileIds} />

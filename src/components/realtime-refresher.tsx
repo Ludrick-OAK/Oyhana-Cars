@@ -6,7 +6,7 @@ import { createBrowserClient } from "@/lib/appwrite/client";
 import { DATABASE_ID, COLLECTIONS } from "@/lib/appwrite/config";
 
 // S'abonne aux changements Appwrite Realtime pour ce véhicule et rafraîchit
-// la page automatiquement — permet à toi et ta femme de voir les mêmes
+// la page automatiquement — permet à tous les membres du foyer de voir les mêmes
 // données se mettre à jour sans recharger, un peu comme avec Firebase avant.
 export function RealtimeRefresher({ vehicleId }: { vehicleId: string }) {
   const router = useRouter();

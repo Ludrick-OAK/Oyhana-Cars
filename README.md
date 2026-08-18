@@ -41,10 +41,10 @@ npm run seed:ds3
 ```
 Crée le véhicule "DS3 Crossback" avec tout l'historique qu'on avait construit ensemble (révisions, vidanges, CT depuis 2022) et les éléments à surveiller par défaut.
 
-### 1.6 Inviter ta femme dans le même foyer
-1. Elle crée son propre compte via `/register` (ça lui crée un foyer à elle, vide).
+### 1.6 Inviter un autre utilisateur dans le même foyer
+1. L'autre utilisateur crée son propre compte via `/register` (ça lui crée un foyer vide).
 2. Toi : va dans **Paramètres** → copie ton **code d'invitation**.
-3. Elle : va dans **Paramètres** → colle le code dans "Rejoindre un autre foyer" → elle voit alors les mêmes véhicules que toi, mis à jour en temps réel (Appwrite Realtime) sans recharger la page.
+3. L'autre utilisateur : va dans **Paramètres** → colle le code dans "Rejoindre un autre foyer" → il/elle voit alors les mêmes véhicules que toi, mis à jour en temps réel (Appwrite Realtime) sans recharger la page.
 
 ---
 
@@ -119,6 +119,12 @@ scripts/
 - Le script `setup:appwrite` est ré-exécutable sans risque (il ignore les éléments déjà existants), pratique si tu ajoutes de nouveaux attributs plus tard.
 
 ## 7. Fonctionnalités ajoutées
+
+### Fiche véhicule enrichie (carte grise)
+Onglet **Réglages** → carte "Informations du véhicule" → bouton "Modifier". Couvre immatriculation (A), VIN (E), puissance fiscale en CV (P.6), catégorie (J) et classe CO2 (V.7), en plus des infos déjà présentes (marque, modèle, motorisation, énergie, boîte, mise en circulation). Volontairement exclus : puissance en kW, cotitulaire(s) (redondant avec les membres du foyer), PTAC/poids à vide.
+
+### Thème clair / sombre
+Bouton soleil/lune dans la barre de navigation (à côté de l'icône Paramètres). Sombre par défaut (identique à l'apparence d'origine) ; le choix est mémorisé automatiquement par le navigateur. Certains éléments très spécifiques (couleurs des graphiques, affichage type "compteur LCD" du kilométrage) restent volontairement sombres dans les deux thèmes pour un rendu cohérent façon tableau de bord.
 
 ### Supprimer un véhicule
 Onglet **Réglages** de la page du véhicule → section "Zone dangereuse". Supprime en cascade l'historique, les règles, les mini-contrôles, les pleins, l'intégration constructeur et les photos associées — aucune trace orpheline en base.

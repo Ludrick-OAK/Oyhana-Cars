@@ -36,7 +36,7 @@ export function OdometerHero({
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
           <p className="text-[11px] uppercase tracking-wide text-muted font-mono mb-1">Kilométrage actuel connu</p>
-          <p className="font-mono font-bold text-4xl bg-[#0f1114] border border-border rounded-lg px-4 py-1 inline-block">
+          <p className="font-mono font-bold text-4xl bg-[#0f1114] text-[#f2ead9] border border-border rounded-lg px-4 py-1 inline-block">
             {stats ? fmtKm(stats.last.km) : "— km"}
           </p>
           {stats && <p className="text-xs text-muted mt-1">relevé le {fmtDate(stats.last.date)}</p>}

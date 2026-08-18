@@ -7,7 +7,7 @@ import { createAdminClient } from "@/lib/appwrite/server";
 import { DATABASE_ID, COLLECTIONS } from "@/lib/appwrite/config";
 import { requireHousehold } from "@/lib/appwrite/household";
 
-// Rejoindre le foyer d'une autre personne (ex: ta femme) via son code d'invitation.
+// Rejoindre le foyer d'une autre personne via son code d'invitation.
 // Utilise le client admin car l'utilisateur qui rejoint n'est, par définition,
 // pas encore autorisé à lire le document du foyer cible.
 export async function joinHousehold(formData: FormData) {

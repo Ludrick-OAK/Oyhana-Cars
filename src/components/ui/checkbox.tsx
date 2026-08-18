@@ -7,7 +7,7 @@ export function Checkbox({ className, ...props }: React.ComponentPropsWithoutRef
   return (
     <CheckboxPrimitive.Root
       className={cn(
-        "h-4 w-4 shrink-0 rounded border border-border bg-[#0f1114] data-[state=checked]:bg-copper data-[state=checked]:border-copper",
+        "h-4 w-4 shrink-0 rounded border border-border bg-input data-[state=checked]:bg-copper data-[state=checked]:border-copper",
         className
       )}
       {...props}

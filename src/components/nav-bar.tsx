@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { signOut } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Car, Settings, LogOut } from "lucide-react";
 
 export function NavBar({ userEmail }: { userEmail?: string }) {
@@ -13,6 +14,7 @@ export function NavBar({ userEmail }: { userEmail?: string }) {
         </Link>
         <div className="flex items-center gap-3">
           {userEmail && <span className="text-xs text-muted hidden sm:inline">{userEmail}</span>}
+          <ThemeToggle />
           <Link href="/parametres">
             <Button variant="ghost" size="icon" title="Paramètres">
               <Settings className="h-4 w-4" />

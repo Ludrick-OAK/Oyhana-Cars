@@ -26,6 +26,11 @@ export interface Vehicle {
   purchaseDate: string | null;
   photoFileIds: string[];
   manufacturerEnabled: boolean;
+  registrationPlate: string | null;
+  vin: string | null;
+  fiscalPowerCv: number | null;
+  vehicleCategory: string | null;
+  co2ClassGkm: number | null;
 }
 
 export interface MaintenanceEntry {
