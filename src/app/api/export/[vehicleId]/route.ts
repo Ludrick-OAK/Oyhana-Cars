@@ -67,7 +67,7 @@ export async function GET(_req: Request, { params }: { params: { vehicleId: stri
   const FUEL_LABELS: Record<string, string> = { essence: "Essence", diesel: "Diesel", hybride: "Hybride", electrique: "Électrique" };
   const TRANSMISSION_LABELS: Record<string, string> = { manuelle: "Manuelle", automatique: "Automatique" };
 
-  const fields: [string, string | null][] = [
+  const fields: [string, string][] = [
     ["Immatriculation", vehicle.registrationPlate],
     ["VIN", vehicle.vin],
     ["Marque", vehicle.brand],
