@@ -59,11 +59,41 @@ export async function GET(_req: Request, { params }: { params: { vehicleId: stri
   page.drawText("CARNET D'ENTRETIEN", { x: MARGIN, y, size: 11, font: bold, color: copper });
   y -= 22;
   page.drawText(pdfSafe(vehicle.name), { x: MARGIN, y, size: 22, font: bold, color: dark });
-  y -= 20;
-  const specs = [vehicle.engine, vehicle.fuelType, vehicle.transmission && `Boîte ${vehicle.transmission}`]
-    .filter(Boolean).join("  ·  ");
-  page.drawText(pdfSafe(specs), { x: MARGIN, y, size: 10, font, color: gray });
   y -= 30;
+
+  page.drawText("FICHE VÉHICULE", { x: MARGIN, y, size: 11, font: bold, color: copper });
+  y -= 20;
+
+  const FUEL_LABELS: Record<string, string> = { essence: "Essence", diesel: "Diesel", hybride: "Hybride", electrique: "Électrique" };
+  const TRANSMISSION_LABELS: Record<string, string> = { manuelle: "Manuelle", automatique: "Automatique" };
+
+  const fields: [string, string | null][] = [
+    ["Immatriculation", vehicle.registrationPlate],
+    ["VIN", vehicle.vin],
+    ["Marque", vehicle.brand],
+    ["Modèle", vehicle.model],
+    ["Catégorie (J)", vehicle.vehicleCategory],
+    ["Motorisation", vehicle.engine],
+    ["Puissance", vehicle.powerHp ? `${vehicle.powerHp} ch` : null],
+    ["Puissance fiscale", vehicle.fiscalPowerCv ? `${vehicle.fiscalPowerCv} CV` : null],
+    ["Énergie", vehicle.fuelType ? (FUEL_LABELS[vehicle.fuelType] ?? vehicle.fuelType) : null],
+    ["Boîte", vehicle.transmission ? `${TRANSMISSION_LABELS[vehicle.transmission] ?? vehicle.transmission}${vehicle.gears ? ` (${vehicle.gears} rapports)` : ""}` : null],
+    ["Émissions CO2", vehicle.co2ClassGkm != null ? `${vehicle.co2ClassGkm} g/km` : null],
+    ["Mise en circulation", vehicle.firstRegistration ? fmtDate(vehicle.firstRegistration) : null],
+    ["Date d'achat", vehicle.purchaseDate ? fmtDate(vehicle.purchaseDate) : null],
+  ].filter(([, v]) => v) as [string, string][];
+
+  const fieldColW = (PAGE_W - 2 * MARGIN) / 2;
+  fields.forEach(([label, value], i) => {
+    const col = i % 2;
+    if (col === 0) newPageIfNeeded(16);
+    const x = MARGIN + col * fieldColW;
+    page.drawText(pdfSafe(label.toUpperCase()), { x, y, size: 7.5, font: bold, color: gray });
+    page.drawText(pdfSafe(value), { x, y: y - 11, size: 10, font, color: dark });
+    if (col === 1) y -= 32;
+  });
+  if (fields.length % 2 === 1) y -= 32;
+  y -= 10;
 
   page.drawLine({ start: { x: MARGIN, y }, end: { x: PAGE_W - MARGIN, y }, thickness: 1, color: rgb(0.85, 0.85, 0.85) });
   y -= 24;

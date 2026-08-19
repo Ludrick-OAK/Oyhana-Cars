@@ -14,10 +14,17 @@ export function OdometerHero({
 
   return (
     <div className="rounded-xl2 border border-border bg-panel p-7 mb-8 relative overflow-hidden">
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <p className="text-[11px] uppercase tracking-[0.18em] text-copper font-mono mb-1">Carnet d'entretien numérique</p>
-          <h1 className="font-display uppercase text-3xl font-semibold mb-1">{vehicle.name}</h1>
+          <div className="flex items-center gap-3 flex-wrap">
+            <h1 className="font-display uppercase text-3xl font-semibold mb-1">{vehicle.name}</h1>
+            {vehicle.registrationPlate && (
+              <span className="font-mono font-bold text-sm tracking-wider bg-[#0f1114] text-[#f2ead9] border border-border rounded px-2.5 py-1">
+                {vehicle.registrationPlate}
+              </span>
+            )}
+          </div>
         </div>
         <a
           href={`/api/export/${vehicle.id}`}
@@ -28,8 +35,13 @@ export function OdometerHero({
       </div>
 
       <p className="text-[13.5px] text-muted mb-6">
-        {[vehicle.engine, vehicle.fuelType, vehicle.transmission && `Boîte ${vehicle.transmission}${vehicle.gears ? " " + vehicle.gears + " rapports" : ""}`]
-          .filter(Boolean).join(" · ")}
+        {[
+          vehicle.engine,
+          vehicle.fuelType,
+          vehicle.transmission && `Boîte ${vehicle.transmission}${vehicle.gears ? " " + vehicle.gears + " rapports" : ""}`,
+          vehicle.fiscalPowerCv && `${vehicle.fiscalPowerCv} CV fiscaux`,
+          vehicle.vehicleCategory && `Cat. ${vehicle.vehicleCategory}`,
+        ].filter(Boolean).join(" · ")}
         {vehicle.firstRegistration && ` · Mise en circulation ${fmtDate(vehicle.firstRegistration)}`}
       </p>
 

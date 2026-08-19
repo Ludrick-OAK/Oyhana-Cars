@@ -7,7 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
+import { fmtDate } from "@/lib/utils";
 import type { Vehicle } from "@/lib/appwrite/types";
+
+const FUEL_LABELS: Record<string, string> = { essence: "Essence", diesel: "Diesel", hybride: "Hybride", electrique: "Électrique" };
+const TRANSMISSION_LABELS: Record<string, string> = { manuelle: "Manuelle", automatique: "Automatique" };
 
 export function VehicleInfoForm({ vehicle }: { vehicle: Vehicle }) {
   const [open, setOpen] = useState(false);
@@ -24,12 +28,21 @@ export function VehicleInfoForm({ vehicle }: { vehicle: Vehicle }) {
         </div>
 
         {!open ? (
-          <div className="grid grid-cols-2 gap-x-6 gap-y-2 mt-4 text-[13px]">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-3 mt-4 text-[13px]">
+            <Info label="Nom" value={vehicle.name} />
+            <Info label="Marque" value={vehicle.brand} />
+            <Info label="Modèle" value={vehicle.model} />
             <Info label="Immatriculation" value={vehicle.registrationPlate} />
             <Info label="VIN" value={vehicle.vin} mono />
-            <Info label="Puissance fiscale" value={vehicle.fiscalPowerCv ? `${vehicle.fiscalPowerCv} CV` : null} />
             <Info label="Catégorie (J)" value={vehicle.vehicleCategory} />
-            <Info label="Classe CO2" value={vehicle.co2ClassGkm != null ? `${vehicle.co2ClassGkm} g/km` : null} />
+            <Info label="Motorisation" value={vehicle.engine} />
+            <Info label="Puissance" value={vehicle.powerHp ? `${vehicle.powerHp} ch` : null} />
+            <Info label="Puissance fiscale" value={vehicle.fiscalPowerCv ? `${vehicle.fiscalPowerCv} CV` : null} />
+            <Info label="Énergie" value={vehicle.fuelType ? FUEL_LABELS[vehicle.fuelType] ?? vehicle.fuelType : null} />
+            <Info label="Boîte" value={vehicle.transmission ? `${TRANSMISSION_LABELS[vehicle.transmission] ?? vehicle.transmission}${vehicle.gears ? ` (${vehicle.gears} rapports)` : ""}` : null} />
+            <Info label="Émissions CO2" value={vehicle.co2ClassGkm != null ? `${vehicle.co2ClassGkm} g/km` : null} />
+            <Info label="Mise en circulation" value={vehicle.firstRegistration ? fmtDate(vehicle.firstRegistration) : null} />
+            <Info label="Date d'achat" value={vehicle.purchaseDate ? fmtDate(vehicle.purchaseDate) : null} />
           </div>
         ) : (
           <form
