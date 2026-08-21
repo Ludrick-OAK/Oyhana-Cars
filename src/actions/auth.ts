@@ -88,6 +88,28 @@ export async function requestPasswordReset(formData: FormData) {
   redirect("/mot-de-passe-oublie?sent=1");
 }
 
+export async function updateOwnPassword(formData: FormData) {
+  const currentPassword = String(formData.get("currentPassword") || "");
+  const newPassword = String(formData.get("newPassword") || "");
+  const newPasswordConfirm = String(formData.get("newPasswordConfirm") || "");
+
+  if (newPassword.length < 8) {
+    redirect(`/parametres?pwError=${encodeURIComponent("Le nouveau mot de passe doit contenir au moins 8 caractères.")}`);
+  }
+  if (newPassword !== newPasswordConfirm) {
+    redirect(`/parametres?pwError=${encodeURIComponent("Les deux mots de passe ne correspondent pas.")}`);
+  }
+
+  const { account } = createSessionClient();
+  try {
+    await account.updatePassword(newPassword, currentPassword);
+  } catch (e: any) {
+    redirect(`/parametres?pwError=${encodeURIComponent(e.message || "Mot de passe actuel incorrect.")}`);
+  }
+
+  redirect("/parametres?pwSuccess=1");
+}
+
 export async function resetPassword(formData: FormData) {
   const userId = String(formData.get("userId") || "");
   const secret = String(formData.get("secret") || "");

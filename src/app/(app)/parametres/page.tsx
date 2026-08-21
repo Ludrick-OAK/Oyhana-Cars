@@ -1,11 +1,14 @@
-import { joinHousehold } from "@/actions/household";
+import { joinHousehold, repairHouseholdPermissions } from "@/actions/household";
+import { updateOwnPassword } from "@/actions/auth";
 import { requireHousehold } from "@/lib/appwrite/household";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
-export default async function SettingsPage({ searchParams }: { searchParams: { error?: string } }) {
+export default async function SettingsPage({
+  searchParams,
+}: { searchParams: { error?: string; pwError?: string; pwSuccess?: string } }) {
   const { household } = await requireHousehold();
 
   return (
@@ -42,6 +45,41 @@ export default async function SettingsPage({ searchParams }: { searchParams: { e
           <p className="text-xs text-muted mt-3">
             Attention : rejoindre un autre foyer déplace ton compte vers ce foyer — tu perdras l'accès aux véhicules de ton foyer actuel (sauf si tu le rejoins à nouveau plus tard avec son propre code).
           </p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardContent className="p-5">
+          <p className="text-sm font-semibold mb-2">Réparer l'accès aux données du foyer</p>
+          <p className="text-xs text-muted mb-3">
+            Si un membre du foyer ne voit pas des véhicules créés avant qu'il ne rejoigne, clique ici pour réappliquer les permissions à toutes les données existantes. Sans risque, peut être relancé à tout moment.
+          </p>
+          <form action={repairHouseholdPermissions}>
+            <Button type="submit" variant="ghost" size="sm">Réparer les permissions</Button>
+          </form>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardContent className="p-5">
+          <p className="text-sm font-semibold mb-3">Changer mon mot de passe</p>
+          <form action={updateOwnPassword} className="space-y-3">
+            <div>
+              <Label htmlFor="currentPassword">Mot de passe actuel</Label>
+              <Input id="currentPassword" name="currentPassword" type="password" required />
+            </div>
+            <div>
+              <Label htmlFor="newPassword">Nouveau mot de passe</Label>
+              <Input id="newPassword" name="newPassword" type="password" required minLength={8} />
+            </div>
+            <div>
+              <Label htmlFor="newPasswordConfirm">Confirme le nouveau mot de passe</Label>
+              <Input id="newPasswordConfirm" name="newPasswordConfirm" type="password" required minLength={8} />
+            </div>
+            {searchParams.pwError && <p className="text-sm text-overdue">{decodeURIComponent(searchParams.pwError)}</p>}
+            {searchParams.pwSuccess && <p className="text-sm text-ok">Mot de passe mis à jour avec succès.</p>}
+            <Button type="submit" size="sm">Mettre à jour</Button>
+          </form>
         </CardContent>
       </Card>
     </div>
