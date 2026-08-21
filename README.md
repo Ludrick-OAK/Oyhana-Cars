@@ -120,6 +120,9 @@ scripts/
 
 ## 7. Fonctionnalités ajoutées
 
+### Mot de passe oublié
+Lien "Mot de passe oublié ?" sur la page de connexion → email envoyé automatiquement avec un lien de réinitialisation (fonction native `account.createRecovery` d'Appwrite). Sur Appwrite Cloud, ces emails d'authentification (récupération, vérification) sont envoyés par l'infrastructure d'Appwrite par défaut — **contrairement aux notifications d'échéances**, aucun provider Messaging à configurer pour que ça fonctionne. Le message affiché après la demande est toujours le même, que l'email existe ou non, pour ne pas laisser deviner quels emails sont enregistrés.
+
 ### Fiche véhicule enrichie (carte grise)
 Onglet **Réglages** → carte "Informations du véhicule" → bouton "Modifier". Couvre immatriculation (A), VIN (E), puissance fiscale en CV (P.6), catégorie (J) et classe CO2 (V.7), en plus des infos déjà présentes (marque, modèle, motorisation, énergie, boîte, mise en circulation). Volontairement exclus : puissance en kW, cotitulaire(s) (redondant avec les membres du foyer), PTAC/poids à vide.
 

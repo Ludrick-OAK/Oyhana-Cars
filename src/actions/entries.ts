@@ -2,7 +2,7 @@
 
 import { ID } from "node-appwrite";
 import { revalidatePath } from "next/cache";
-import { createSessionClient } from "@/lib/appwrite/server";
+import { createAdminClient, createSessionClient } from "@/lib/appwrite/server";
 import { DATABASE_ID, COLLECTIONS } from "@/lib/appwrite/config";
 import { requireHousehold } from "@/lib/appwrite/household";
 import { householdPermissions } from "@/lib/appwrite/permissions";
@@ -10,7 +10,7 @@ import type { EntryType } from "@/lib/appwrite/types";
 
 export async function addEntry(vehicleId: string, formData: FormData) {
   const { userId, household } = await requireHousehold();
-  const { databases } = createSessionClient();
+  const { databases } = createAdminClient();
 
   const itemsRaw = String(formData.get("items") || "");
   const items = itemsRaw.split("\n").map((s) => s.trim()).filter(Boolean);

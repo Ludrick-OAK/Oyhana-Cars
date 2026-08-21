@@ -5,9 +5,18 @@ import { SESSION_COOKIE } from "@/lib/appwrite/config";
 // (cookie valide, non expiré) se fait dans chaque page/action via
 // createSessionClient().account.get(), qui redirige vers /login si invalide.
 export function middleware(request: NextRequest) {
+  const path = request.nextUrl.pathname;
+
+  // Route pilotée par un jeton à usage unique dans l'URL, pas par l'état de
+  // connexion : ne jamais rediriger, ni si connecté ni si déconnecté.
+  if (path.startsWith("/reinitialiser-mot-de-passe")) {
+    return NextResponse.next();
+  }
+
   const hasSession = !!request.cookies.get(SESSION_COOKIE)?.value;
-  const isAuthRoute = request.nextUrl.pathname.startsWith("/login") ||
-    request.nextUrl.pathname.startsWith("/register");
+  const isAuthRoute = path.startsWith("/login") ||
+    path.startsWith("/register") ||
+    path.startsWith("/mot-de-passe-oublie");
 
   if (!hasSession && !isAuthRoute) {
     const url = request.nextUrl.clone();

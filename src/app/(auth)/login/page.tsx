@@ -4,12 +4,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 
-export default function LoginPage({ searchParams }: { searchParams: { error?: string } }) {
+export default function LoginPage({ searchParams }: { searchParams: { error?: string; reset?: string } }) {
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
       <div className="w-full max-w-sm">
         <p className="text-[11px] uppercase tracking-[0.18em] text-copper mb-1 font-mono">Oyhana Cars</p>
         <h1 className="font-display uppercase text-3xl font-semibold mb-6">Connexion</h1>
+
+        {searchParams.reset && (
+          <p className="text-sm text-ok mb-4">Mot de passe défini avec succès — connecte-toi.</p>
+        )}
 
         <form action={signIn} className="space-y-4">
           <div>
@@ -17,7 +21,12 @@ export default function LoginPage({ searchParams }: { searchParams: { error?: st
             <Input id="email" name="email" type="email" required placeholder="toi@exemple.com" />
           </div>
           <div>
-            <Label htmlFor="password">Mot de passe</Label>
+            <div className="flex items-center justify-between mb-1.5">
+              <Label htmlFor="password" className="mb-0">Mot de passe</Label>
+              <Link href="/mot-de-passe-oublie" className="text-[11px] text-muted hover:text-copper">
+                Mot de passe oublié ?
+              </Link>
+            </div>
             <Input id="password" name="password" type="password" required />
           </div>
 

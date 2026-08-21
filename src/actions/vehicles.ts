@@ -3,7 +3,7 @@
 import { ID, Query } from "node-appwrite";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { createSessionClient } from "@/lib/appwrite/server";
+import { createAdminClient, createSessionClient } from "@/lib/appwrite/server";
 import { DATABASE_ID, COLLECTIONS, PHOTOS_BUCKET_ID } from "@/lib/appwrite/config";
 import { requireHousehold } from "@/lib/appwrite/household";
 import { householdPermissions } from "@/lib/appwrite/permissions";
@@ -11,7 +11,10 @@ import { DEFAULT_RULES, DEFAULT_MINICHECKS } from "@/lib/maintenance/default-rul
 
 export async function createVehicle(formData: FormData) {
   const { household } = await requireHousehold();
-  const { databases } = createSessionClient();
+  // Client admin nécessaire ici : on accorde des permissions à TOUS les membres
+  // du foyer (pas seulement à soi-même), ce qu'une session utilisateur normale
+  // n'est pas autorisée à faire côté Appwrite.
+  const { databases } = createAdminClient();
   const perms = householdPermissions(household.memberIds);
 
   const payload = {

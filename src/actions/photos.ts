@@ -2,13 +2,15 @@
 
 import { ID, Permission, Role } from "node-appwrite";
 import { revalidatePath } from "next/cache";
-import { createSessionClient } from "@/lib/appwrite/server";
+import { createAdminClient, createSessionClient } from "@/lib/appwrite/server";
 import { DATABASE_ID, COLLECTIONS, PHOTOS_BUCKET_ID, MAX_PHOTOS_PER_VEHICLE } from "@/lib/appwrite/config";
 import { requireHousehold } from "@/lib/appwrite/household";
 
 export async function uploadVehiclePhoto(vehicleId: string, formData: FormData) {
   const { household } = await requireHousehold();
-  const { databases, storage } = createSessionClient();
+  // Client admin nécessaire : on accorde des droits d'update/delete à TOUS les
+  // membres du foyer sur ce fichier, pas seulement à la personne qui upload.
+  const { databases, storage } = createAdminClient();
 
   const file = formData.get("photo") as File | null;
   if (!file || file.size === 0) return;

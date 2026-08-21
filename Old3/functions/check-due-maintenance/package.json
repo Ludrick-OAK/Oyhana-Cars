@@ -1,0 +1,9 @@
+{
+  "name": "check-due-maintenance",
+  "version": "1.0.0",
+  "main": "src/main.js",
+  "type": "commonjs",
+  "dependencies": {
+    "node-appwrite": "^14.0.0"
+  }
+}
